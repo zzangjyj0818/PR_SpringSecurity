@@ -1,6 +1,5 @@
 package com.example.chap06.config;
 
-
 import com.example.chap06.services.AuthenticationProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

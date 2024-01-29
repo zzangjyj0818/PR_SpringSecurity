@@ -1,10 +1,12 @@
 package com.example.chap06.entity;
 
+
+import com.example.chap06.entity.enums.Currency;
 import javax.persistence.*;
-import java.util.Currency;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

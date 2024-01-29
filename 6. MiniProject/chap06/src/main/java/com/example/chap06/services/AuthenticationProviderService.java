@@ -1,6 +1,5 @@
 package com.example.chap06.services;
 
-
 import com.example.chap06.model.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

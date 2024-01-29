@@ -1,12 +1,13 @@
 package com.example.chap06.entity;
-
 import javax.persistence.*;
 
 @Entity
 public class Authority {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
 
     @JoinColumn(name = "user")
