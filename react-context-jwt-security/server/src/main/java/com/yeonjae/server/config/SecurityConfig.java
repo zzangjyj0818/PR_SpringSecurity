@@ -2,6 +2,7 @@ package com.yeonjae.server.config;
 
 import com.yeonjae.server.security.custom.CustomUserDetailService;
 import com.yeonjae.server.security.jwt.filter.JwtAuthenticationFilter;
+import com.yeonjae.server.security.jwt.filter.JwtRequestFilter;
 import com.yeonjae.server.security.jwt.provider.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
 @Configuration
@@ -38,6 +40,7 @@ public class SecurityConfig {
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         log.info("Setting Security");
@@ -45,8 +48,9 @@ public class SecurityConfig {
         http.formLogin(login -> login.disable());
         http.httpBasic(basic -> basic.disable());
         http.csrf(csrf -> csrf.disable());
-        http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider), null)
-                .addFilterBefore(null, null);
+        http.addFilterAt(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider)
+                        , UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         // 인가 설정
         // 상위 경로 -> 하위 경로 순으로 인가 설정을 해줘야함
