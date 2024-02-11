@@ -28,6 +28,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * 인증을 시도하는 메서드 구현
      * /login 경로로 request 왔을때만...
      * 필터로 걸러서 인증을 시도함.
+     * client -> filter (/login) -> server
+     * username, password 로 인증 시도
+     * 인증 성공 시, JWT 생성
+     * 응답 헤더에 JWT 를 실어서 반환
+     * 인증 실패 시, 헤더의 status 에 401(UNAUTHORIZED)을 담아서 반환
      */
 
     @Override

@@ -6,9 +6,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserAuth {
     private int authNo;
     private String userId;
     private String auth;
+
+    public UserAuth(String userId, String auth) {
+        this.userId = userId;
+        this.auth = auth;
+    }
 }
