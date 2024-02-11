@@ -1,5 +1,6 @@
 package com.yeonjae.server.security.custom;
 
+import com.yeonjae.server.dto.CustomUser;
 import com.yeonjae.server.dto.Users;
 import com.yeonjae.server.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,9 @@ public class CustomUserDetailService implements UserDetailsService {
         log.info("Exist User In DataBase : " + user.toString());
 
         // Users -> CustomUser
-        
-        return ;
+        CustomUser customUser = new CustomUser(user);
+
+        log.info("customUser : " + customUser.toString());
+        return customUser;
     }
 }
