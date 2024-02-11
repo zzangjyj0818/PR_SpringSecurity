@@ -7,24 +7,24 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-    private PasswordEncoder passwordEncoder;
-    private UserMapper userMapper;
-
-    private AuthenticationManager authenticationManager;
-
     @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserMapper userMapper, AuthenticationManager authenticationManager) {
-        this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
-        this.authenticationManager = authenticationManager;
-    }
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserMapper userMapper;
 
     /*
     * 1. 비밀번호 암호화
@@ -68,15 +68,35 @@ public class UserServiceImpl implements UserService {
 
         // AuthenticationManager
         // 인증을 관리하는 객체를 사용하여 인증 여부 확인
+        // 아이디 패스워드로 인증 요청 토큰 생성
+        UsernamePasswordAuthenticationToken token
+                = new UsernamePasswordAuthenticationToken(username, password);
+
+        // 토큰에 요청정보를 등록함
+        token.setDetails(new WebAuthenticationDetails(request));
+
+        // 토큰을 이용하여 인증 요청 - 로그인
+        Authentication authentication = authenticationManager.authenticate(token);
+        log.info("인증 여부 : " + authentication.isAuthenticated());
+
+        User authUser = (User) authentication.getPrincipal();
+        log.info("인증된 사용자 아이디 : " + authUser.getUsername());
+
+        // 시큐리티 컨텍스트에 인증된 사용자를 등록함
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
     public int update(Users user) throws Exception {
-        return 0;
+        String userPw = user.getUserPw();
+        String encodedPw = passwordEncoder.encode(userPw);
+        user.setUserPw(encodedPw);
+        int result = userMapper.update(user);
+        return result;
     }
 
     @Override
     public int delete(String userId) throws Exception {
-        return 0;
+        return userMapper.delete(userId);
     }
 }
