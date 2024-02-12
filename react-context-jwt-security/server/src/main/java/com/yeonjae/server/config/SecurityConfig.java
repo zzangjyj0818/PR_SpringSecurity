@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,9 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Slf4j
-@Configuration
-@EnableWebSecurity
+
 // 필터 설정 및 인가 설정
 /*
  * 필터 설정
@@ -33,6 +32,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * /user/** - USER, ADMIN
  * /admin/** - ADMIN
  */
+@Slf4j
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -60,8 +62,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/", "/login")
                         .permitAll()
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIM")
-                        .requestMatchers("/admin/**").hasRole("ADMIM")
+                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
         );
 

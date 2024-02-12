@@ -1,6 +1,7 @@
 package com.yeonjae.server.security.jwt.filter;
 
 import com.yeonjae.server.dto.CustomUser;
+import com.yeonjae.server.dto.UserAuth;
 import com.yeonjae.server.security.custom.JwtConstants;
 import com.yeonjae.server.security.jwt.provider.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
@@ -79,16 +80,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         CustomUser user = (CustomUser) authentication.getPrincipal();
         int userNo = user.getUser().getNo();
         String userId = user.getUser().getUserId();
+//        String userPw = user.getUser().getUserPw();
+
 
         List<String> roles = user.getUser().getAuthList().stream()
-                .map(auth -> auth.getAuth())
+                .map(UserAuth::getAuth)
                 .collect(Collectors.toList());
 
         // 사용자 정보를 꺼내왔으면
         // JWT 를 생성
         String jwt = jwtTokenProvider.createToken(userNo, userId, roles);
 
-        response.addHeader(JwtConstants.TOKEN_HEADER, JwtConstants.TOKEN_PREFIX+ jwt);
+        response.addHeader(JwtConstants.TOKEN_HEADER, JwtConstants.TOKEN_PREFIX + jwt);
         response.setStatus(200);
     }
 }
