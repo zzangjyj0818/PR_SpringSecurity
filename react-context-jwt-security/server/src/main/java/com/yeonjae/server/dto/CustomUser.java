@@ -21,6 +21,7 @@ public class CustomUser implements UserDetails {
      * 권한 getter 메서드
      * List<UserAuth> ---> Collection<SimpleGrantedAuthority> (auth) 권한만 넘김
      */
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<UserAuth> authList = user.getAuthList();
